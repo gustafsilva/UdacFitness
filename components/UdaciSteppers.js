@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { FontAwesome, Entypo } from '@expo/vector-icons';
 
@@ -22,6 +23,14 @@ const UdaciStreppers = (props) => {
       <Text>{unit}</Text>
     </View>
   );
+};
+
+UdaciStreppers.propTypes = {
+  // max: PropTypes.number.isRequired,
+  unit: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+  onDecrement: PropTypes.func.isRequired,
+  onIncrement: PropTypes.func.isRequired,
 };
 
 export default UdaciStreppers;

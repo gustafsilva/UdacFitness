@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { View, Text, Slider } from 'react-native';
 
 const UdaciSlider = (props) => {
@@ -24,5 +25,13 @@ const UdaciSlider = (props) => {
     </View>
   );
 };
+
+UdaciSlider.propTypes = {
+  max: PropTypes.number.isRequired,
+  unit: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
+
 
 export default UdaciSlider;
