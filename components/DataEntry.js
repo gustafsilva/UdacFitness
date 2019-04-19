@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import PropTypes from 'prop-types';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 import DateHeader from './DateHeader';
 import UdaciSlider from './UdaciSlider';
 import UdaciSteppers from './UdaciSteppers';
-import { getMetricMetaInfo } from '../utils/helpers';
+import TextButton from './TextButton';
+import { getMetricMetaInfo, timeToString } from '../utils/helpers';
+import { submitEntry, removeEntry } from '../utils/api';
 
 const SubmitBtn = ({ onPress }) => (
   <TouchableOpacity onPress={onPress}>
@@ -47,29 +51,48 @@ class DataEntry extends Component {
   slider = (metric, value) => { this.setState({ [metric]: value }); }
 
   submit = () => {
-    // const key = timeToString();
-    // const entry = this.state;
+    const key = timeToString();
+    const entry = this.state;
 
-    this.setState({
-      run: 0,
-      bike: 0,
-      swim: 0,
-      sleep: 0,
-      eat: 0,
-    });
     // update redux
     // navigate to home
     // save to db
+    submitEntry({ key, entry });
     // clear local notification
+  }
+
+  reset = () => {
+    const key = timeToString();
+
+    // update redux
+    // route to home
+    // update db
+    removeEntry(key);
   }
 
   render() {
     const { state } = this;
+    const { alreadyLogged } = this.props;
     const metaInfo = getMetricMetaInfo();
     const keys = Object.keys(metaInfo);
 
+    if (alreadyLogged) {
+      return (
+        <View>
+          <Ionicons
+            name="md-happy"
+            size={100}
+          />
+          <Text>You already logged your information for today.</Text>
+          <TextButton onPress={this.reset}>
+            Reset
+          </TextButton>
+        </View>
+      );
+    }
+
     return (
-      <View>
+      <ScrollView>
         <DateHeader date={(new Date()).toLocaleDateString()} />
 
         {keys.map((key) => {
@@ -101,9 +124,17 @@ class DataEntry extends Component {
         })}
 
         <SubmitBtn onPress={this.submit} />
-      </View>
+      </ScrollView>
     );
   }
 }
+
+DataEntry.defaultProps = {
+  alreadyLogged: false,
+};
+
+DataEntry.propTypes = {
+  alreadyLogged: PropTypes.bool,
+};
 
 export default DataEntry;
