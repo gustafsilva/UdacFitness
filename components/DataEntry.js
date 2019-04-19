@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { View, Text } from 'react-native'
 
-import { getMetricMetaInfo } from '../utils/helpers';
+import UdaciSlider from './UdaciSlider'
+import UdaciSteppers from './UdaciSteppers'
+import { getMetricMetaInfo } from '../utils/helpers'
 
 
 class DataEntry extends Component {
@@ -25,7 +27,6 @@ class DataEntry extends Component {
       }
     })
   }
-
   decrement = (metric) => {
     const { step } = getMetricMetaInfo(metric);
 
@@ -36,14 +37,37 @@ class DataEntry extends Component {
       }
     })
   }
-
   slider = (metric, value) => { this.setState({ [metric]: value }) }
 
 
   render() {
+    const metaInfo = getMetricMetaInfo()
+    const keys = Object.keys(metaInfo)
+
     return (
       <View>
-        {getMetricMetaInfo('sleep').getIcon()}
+        {keys.map((key) => {
+          const { getIcon, type, ...rest } = metaInfo[key]
+          const value = this.state[key]
+
+          return (
+            <View key={key}>
+              {getIcon()}
+              {type === 'slider'
+                ? <UdaciSlider
+                    value={value}
+                    onChange={(value) => { this.slider(key, value) }}
+                    {...rest}
+                  />
+                : <UdaciSteppers
+                    value={value}
+                    increment={() => { this.increment(key) }}
+                    decrement={() => { this.decrement(key) }}
+                  />
+              }
+            </View>
+          )
+        })}
       </View>
     )
   }
