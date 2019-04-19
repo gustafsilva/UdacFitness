@@ -28,7 +28,7 @@ const UdaciSlider = (props) => {
 
 UdaciSlider.propTypes = {
   max: PropTypes.number.isRequired,
-  unit: PropTypes.number.isRequired,
+  unit: PropTypes.string.isRequired,
   value: PropTypes.number.isRequired,
   onChange: PropTypes.func.isRequired,
 };

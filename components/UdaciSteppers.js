@@ -27,7 +27,7 @@ const UdaciStreppers = (props) => {
 
 UdaciStreppers.propTypes = {
   // max: PropTypes.number.isRequired,
-  unit: PropTypes.number.isRequired,
+  unit: PropTypes.string.isRequired,
   value: PropTypes.number.isRequired,
   onDecrement: PropTypes.func.isRequired,
   onIncrement: PropTypes.func.isRequired,
