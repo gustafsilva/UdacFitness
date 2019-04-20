@@ -2,11 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
   StyleSheet,
-  Platform,
   View,
   Text,
   TouchableOpacity,
-  ScrollView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
@@ -15,14 +13,19 @@ import DateHeader from './DateHeader';
 import UdaciSlider from './UdaciSlider';
 import UdaciSteppers from './UdaciSteppers';
 import TextButton from './TextButton';
-import { getMetricMetaInfo, timeToString, getDailyReminderValue } from '../utils/helpers';
+import {
+  getMetricMetaInfo,
+  timeToString,
+  getDailyReminderValue,
+  getPlatformOS,
+} from '../utils/helpers';
 import { submitEntry, removeEntry } from '../utils/api';
 import { addEntry } from '../store/actions';
 import { white, purple } from '../utils/colors';
 
 const SubmitBtn = ({ onPress }) => (
   <TouchableOpacity
-    style={Platform.OS === 'ios' ? styles.iosSubmitBtn : styles.androidSubmitBtn}
+    style={getPlatformOS() === 'ios' ? styles.iosSubmitBtn : styles.androidSubmitBtn}
     onPress={onPress}
   >
     <Text style={styles.submitBtnText}>SUBMIT</Text>
@@ -120,7 +123,7 @@ class DataEntry extends Component {
     }
 
     return (
-      <ScrollView style={styles.container}>
+      <View style={styles.container}>
         <DateHeader date={(new Date()).toLocaleDateString()} />
 
         {keys.map((key) => {
@@ -152,7 +155,7 @@ class DataEntry extends Component {
         })}
 
         <SubmitBtn onPress={this.submit} />
-      </ScrollView>
+      </View>
     );
   }
 }

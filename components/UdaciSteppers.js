@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Platform,
   StyleSheet,
   View,
   Text,
@@ -10,6 +9,7 @@ import {
 import { FontAwesome, Entypo } from '@expo/vector-icons';
 
 import { purple, gray, white } from '../utils/colors';
+import { getPlatformOS } from '../utils/helpers';
 
 class UdaciStreppers extends Component {
   renderIosBtn = () => {
@@ -69,7 +69,7 @@ class UdaciStreppers extends Component {
 
     return (
       <View style={[styles.row, { justifyContent: 'space-between' }]}>
-        {Platform.OS === 'ios' ? this.renderIosBtn() : this.renderAndroidBtn()}
+        {getPlatformOS() === 'ios' ? this.renderIosBtn() : this.renderAndroidBtn()}
 
         <View style={styles.metricCount}>
           <Text style={{ fontSize: 24, textAlign: 'center' }}>{value}</Text>
