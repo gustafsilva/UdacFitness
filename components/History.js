@@ -10,6 +10,7 @@ import {
 import UdaciFitnessCalendar from 'udacifitness-calendar';
 
 import DateHeader from './DateHeader';
+import MetricCard from './MetricCard';
 import { fetchCalendarResults } from '../utils/api';
 import { timeToString, getDailyReminderValue, getPlatformOS } from '../utils/helpers';
 import { addEntry, receiveEntries } from '../store/actions';
@@ -30,7 +31,7 @@ class History extends Component {
       });
   }
 
-  renderItem = ({ today, ...metrics }, formattedDate, key) => (
+  renderItem = ({ today, ...metrics }, formattedDate) => (
     <View>
       {today
         ? (
@@ -40,8 +41,8 @@ class History extends Component {
           </View>
         )
         : (
-          <TouchableOpacity onPress={() => {}}>
-            <Text>{JSON.stringify(metrics)}</Text>
+          <TouchableOpacity style={styles.item} onPress={() => {}}>
+            <MetricCard metrics={metrics} date={formattedDate} />
           </TouchableOpacity>
         )
       }
