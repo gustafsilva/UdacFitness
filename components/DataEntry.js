@@ -7,13 +7,15 @@ import {
   ScrollView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { connect } from 'react-redux';
 
 import DateHeader from './DateHeader';
 import UdaciSlider from './UdaciSlider';
 import UdaciSteppers from './UdaciSteppers';
 import TextButton from './TextButton';
-import { getMetricMetaInfo, timeToString } from '../utils/helpers';
+import { getMetricMetaInfo, timeToString, getDailyReminderValue } from '../utils/helpers';
 import { submitEntry, removeEntry } from '../utils/api';
+import { addEntry } from '../store/actions';
 
 const SubmitBtn = ({ onPress }) => (
   <TouchableOpacity onPress={onPress}>
@@ -58,8 +60,12 @@ class DataEntry extends Component {
   submit = () => {
     const key = timeToString();
     const entry = this.state;
+    const { dispatch } = this.props;
 
     // update redux
+    dispatch(addEntry({
+      [key]: entry,
+    }));
     // navigate to home
     // save to db
     submitEntry({ key, entry });
@@ -67,9 +73,20 @@ class DataEntry extends Component {
   }
 
   reset = () => {
+    const { dispatch } = this.props;
     const key = timeToString();
 
+    this.setState({
+      run: 0,
+      bike: 0,
+      swim: 0,
+      sleep: 0,
+      eat: 0,
+    });
     // update redux
+    dispatch(addEntry({
+      [key]: getDailyReminderValue(),
+    }));
     // route to home
     // update db
     removeEntry(key);
@@ -140,6 +157,15 @@ DataEntry.defaultProps = {
 
 DataEntry.propTypes = {
   alreadyLogged: PropTypes.bool,
+  dispatch: PropTypes.func.isRequired,
 };
 
-export default DataEntry;
+const mapStateToProps = (state) => {
+  const key = timeToString();
+
+  return {
+    alreadyLogged: state[key] && typeof state[key].today === 'undefined',
+  };
+};
+
+export default connect(mapStateToProps)(DataEntry);
