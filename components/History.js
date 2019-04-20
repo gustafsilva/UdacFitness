@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import UdaciFitnessCalendar from 'udacifitness-calendar';
+import { AppLoading } from 'expo';
 
 import DateHeader from './DateHeader';
 import MetricCard from './MetricCard';
@@ -17,6 +18,10 @@ import { addEntry, receiveEntries } from '../store/actions';
 import { white } from '../utils/colors';
 
 class History extends Component {
+  state = {
+    loading: true,
+  };
+
   componentDidMount() {
     const { dispatch } = this.props;
 
@@ -28,7 +33,8 @@ class History extends Component {
 
           dispatch(addEntryAction);
         }
-      });
+      })
+      .then(() => { this.setState({ loading: false }); });
   }
 
   renderItem = ({ today, ...metrics }, formattedDate) => (
@@ -58,6 +64,11 @@ class History extends Component {
 
   render() {
     const { entries } = this.props;
+    const { loading } = this.state;
+
+    if (loading === true) {
+      return <AppLoading />;
+    }
 
     return (
       <UdaciFitnessCalendar
