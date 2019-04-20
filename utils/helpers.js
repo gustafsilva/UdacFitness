@@ -163,4 +163,4 @@ export function getDailyReminderValue() {
   };
 }
 
-export const getPlatformOS = () => Platform.OS;
+export const getPlatformOS = () => 'ios';
