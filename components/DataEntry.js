@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
+  StyleSheet,
+  Platform,
   View,
   Text,
   TouchableOpacity,
@@ -16,10 +18,14 @@ import TextButton from './TextButton';
 import { getMetricMetaInfo, timeToString, getDailyReminderValue } from '../utils/helpers';
 import { submitEntry, removeEntry } from '../utils/api';
 import { addEntry } from '../store/actions';
+import { white, purple } from '../utils/colors';
 
 const SubmitBtn = ({ onPress }) => (
-  <TouchableOpacity onPress={onPress}>
-    <Text>SUBMIT</Text>
+  <TouchableOpacity
+    style={Platform.OS === 'ios' ? styles.iosSubmitBtn : styles.androidSubmitBtn}
+    onPress={onPress}
+  >
+    <Text style={styles.submitBtnText}>SUBMIT</Text>
   </TouchableOpacity>
 );
 
@@ -100,13 +106,13 @@ class DataEntry extends Component {
 
     if (alreadyLogged) {
       return (
-        <View>
+        <View style={styles.center}>
           <Ionicons
-            name="md-happy"
+            name={Platform.OS === 'ios' ? 'ios-happy-outline' : 'md-happy'}
             size={100}
           />
           <Text>You already logged your information for today.</Text>
-          <TextButton onPress={this.reset}>
+          <TextButton onPress={this.reset} style={{ padding: 30 }}>
             Reset
           </TextButton>
         </View>
@@ -114,7 +120,7 @@ class DataEntry extends Component {
     }
 
     return (
-      <ScrollView>
+      <ScrollView style={styles.container}>
         <DateHeader date={(new Date()).toLocaleDateString()} />
 
         {keys.map((key) => {
@@ -122,7 +128,7 @@ class DataEntry extends Component {
           const value = state[key];
 
           return (
-            <View key={key}>
+            <View key={key} style={styles.row}>
               {getIcon()}
               {type === 'slider'
                 ? (
@@ -150,6 +156,50 @@ class DataEntry extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: white,
+  },
+  row: {
+    flexDirection: 'row',
+    flex: 1,
+    alignItems: 'center',
+  },
+  iosSubmitBtn: {
+    backgroundColor: purple,
+    padding: 10,
+    borderRadius: 7,
+    height: 45,
+    marginLeft: 40,
+    marginRight: 40,
+  },
+  androidSubmitBtn: {
+    backgroundColor: purple,
+    padding: 10,
+    paddingLeft: 30,
+    paddingRight: 30,
+    height: 45,
+    borderRadius: 2,
+    alignSelf: 'flex-end',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  submitBtnText: {
+    color: white,
+    fontSize: 22,
+    textAlign: 'center',
+  },
+  center: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 30,
+    marginRight: 30,
+  },
+});
 
 DataEntry.defaultProps = {
   alreadyLogged: false,
