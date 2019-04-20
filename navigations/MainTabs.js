@@ -6,8 +6,8 @@ import {
 } from 'react-navigation';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
 
-import History from './History';
-import DataEntry from './DataEntry';
+import History from '../components/History';
+import DataEntry from '../components/DataEntry';
 import { getPlatformOS } from '../utils/helpers';
 import { purple, white } from '../utils/colors';
 
