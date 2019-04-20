@@ -1,6 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, Slider } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Slider,
+} from 'react-native';
+
+import { gray } from '../utils/colors';
 
 const UdaciSlider = (props) => {
   const {
@@ -12,19 +19,36 @@ const UdaciSlider = (props) => {
   } = props;
 
   return (
-    <View>
+    <View style={styles.row}>
       <Slider
+        style={{ flex: 1 }}
         value={value}
         step={step}
         maximumValue={max}
         minimumValue={0}
         onValueChange={onChange}
       />
-      <Text>{value}</Text>
-      <Text>{unit}</Text>
+
+      <View style={styles.metricCount}>
+        <Text style={{ fontSize: 24, textAlign: 'center' }}>{value}</Text>
+        <Text style={{ fontSize: 18, color: gray }}>{unit}</Text>
+      </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  row: {
+    flexDirection: 'row',
+    flex: 1,
+    alignItems: 'center',
+  },
+  metricCount: {
+    width: 85,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 UdaciSlider.propTypes = {
   max: PropTypes.number.isRequired,
@@ -32,6 +56,5 @@ UdaciSlider.propTypes = {
   value: PropTypes.number.isRequired,
   onChange: PropTypes.func.isRequired,
 };
-
 
 export default UdaciSlider;
