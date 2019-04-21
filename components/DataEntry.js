@@ -81,6 +81,13 @@ class DataEntry extends Component {
     // save to db
     submitEntry({ key, entry });
     // clear local notification
+    this.setState({
+      run: 0,
+      bike: 0,
+      swim: 0,
+      sleep: 0,
+      eat: 0,
+    });
   }
 
   reset = () => {
