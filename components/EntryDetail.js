@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Text } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
+import { connect } from 'react-redux';
+
+import MetricCard from './MetricCard';
+import { white } from '../utils/colors';
 
 class EntryDetail extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -14,14 +18,37 @@ class EntryDetail extends Component {
   }
 
   render() {
-    const { navigation } = this.props;
+    const { metrics, entryId } = this.props;
 
-    return <Text>{`Entry Detail - ${JSON.stringify(navigation.state.params.entryId)}`}</Text>;
+    return (
+      <View style={styles.container}>
+        <MetricCard metrics={metrics} />
+        <Text>{`Entry Detail - ${JSON.stringify(entryId)}`}</Text>
+      </View>
+    );
   }
 }
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: white,
+    padding: 15,
+  }
+});
+
 EntryDetail.propTypes = {
-  navigation: PropTypes.objectOf(PropTypes.any).isRequired,
+  entryId: PropTypes.string.isRequired,
+  metrics: PropTypes.objectOf(PropTypes.number).isRequired,
 };
 
-export default EntryDetail;
+const mapStateToProps = (state, { navigation }) => {
+  const { entryId } = navigation.state.params;
+
+  return {
+    entryId,
+    metrics: state[entryId],
+  };
+};
+
+export default connect(mapStateToProps)(EntryDetail);
