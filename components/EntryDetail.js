@@ -4,7 +4,11 @@ import { StyleSheet, View, Text } from 'react-native';
 import { connect } from 'react-redux';
 
 import MetricCard from './MetricCard';
+import TextButton from './TextButton';
 import { white } from '../utils/colors';
+import { addEntry } from '../store/actions';
+import { removeEntry } from '../utils/api';
+import { timeToString, getDailyReminderValue } from '../utils/helpers';
 
 class EntryDetail extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -17,13 +21,28 @@ class EntryDetail extends Component {
     return { title: `${month}/${day}/${year}` };
   }
 
+  shouldComponentUpdate = (nextProps) => nextProps.metrics !== null && !nextProps.metrics.today;
+
+  reset = () => {
+    const { remove, goBack, entryId } = this.props;
+
+    remove();
+    goBack();
+    removeEntry(entryId);
+  }
+
   render() {
-    const { metrics, entryId } = this.props;
+    const { metrics } = this.props;
 
     return (
       <View style={styles.container}>
         <MetricCard metrics={metrics} />
-        <Text>{`Entry Detail - ${JSON.stringify(entryId)}`}</Text>
+        <TextButton
+          style={{ margin: 20 }}
+          onPress={this.reset}
+        >
+          RESET
+        </TextButton>
       </View>
     );
   }
@@ -39,7 +58,9 @@ const styles = StyleSheet.create({
 
 EntryDetail.propTypes = {
   entryId: PropTypes.string.isRequired,
-  metrics: PropTypes.objectOf(PropTypes.number).isRequired,
+  metrics: PropTypes.objectOf(PropTypes.any).isRequired,
+  remove: PropTypes.func.isRequired,
+  goBack: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, { navigation }) => {
@@ -51,4 +72,19 @@ const mapStateToProps = (state, { navigation }) => {
   };
 };
 
-export default connect(mapStateToProps)(EntryDetail);
+const mapDispatchToProps = (dispatch, { navigation }) => {
+  const { entryId } = navigation.state.params;
+
+  return {
+    remove: () => (
+      dispatch(addEntry({
+        [entryId]: timeToString() === entryId
+          ? getDailyReminderValue()
+          : null
+      }))
+    ),
+    goBack: () => navigation.goBack(),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(EntryDetail);

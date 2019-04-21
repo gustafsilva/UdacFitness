@@ -8,7 +8,7 @@ import { gray } from '../utils/colors';
 
 const MetricCard = ({ date, metrics }) => (
   <View>
-    { date !== '' && <DateHeader date={date} />}
+    {date !== '' && <DateHeader date={date} />}
     {Object.keys(metrics).map((metric) => {
       const {
         getIcon,
