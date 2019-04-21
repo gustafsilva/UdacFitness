@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 
 import store from './store';
 import UdaciStatusBar from './components/UdaciStatusBar';
-import MainTabs from './navigations/MainTabs';
+import MainNavigator from './navigations/MainNavigator';
 import { purple } from './utils/colors';
 
 // eslint-disable-next-line react/prefer-stateless-function
@@ -15,7 +15,7 @@ export default class App extends Component {
       <Provider store={store}>
         <View style={{ flex: 1 }}>
           <UdaciStatusBar backgroundColor={purple} barStyle="light-content" />
-          <MainTabs />
+          <MainNavigator />
         </View>
       </Provider>
     );

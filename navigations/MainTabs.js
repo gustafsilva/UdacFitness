@@ -30,7 +30,7 @@ const RouteConfigs = {
 
 const TabNavigatorConfig = {
   navigationOptions: {
-    header: null,
+    header: null, // verificar se é nescessário.
   },
   tabBarOptions: {
     activeTintColor: getPlatformOS() === 'ios' ? purple : white,

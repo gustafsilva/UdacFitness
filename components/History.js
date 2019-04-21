@@ -37,23 +37,27 @@ class History extends Component {
       .then(() => { this.setState({ loading: false }); });
   }
 
-  renderItem = ({ today, ...metrics }, formattedDate) => (
-    <View>
-      {today
-        ? (
-          <View style={styles.item}>
-            <DateHeader date={formattedDate} />
-            <Text style={styles.noDataText}>{today}</Text>
-          </View>
-        )
-        : (
-          <TouchableOpacity style={styles.item} onPress={() => {}}>
-            <MetricCard metrics={metrics} date={formattedDate} />
-          </TouchableOpacity>
-        )
-      }
-    </View>
-  )
+  renderItem = ({ today, ...metrics }, formattedDate, key) => {
+    const { navigation } = this.props;
+
+    return (
+      <View style={styles.item}>
+        {today
+          ? (
+            <View>
+              <DateHeader date={formattedDate} />
+              <Text style={styles.noDataText}>{today}</Text>
+            </View>
+          )
+          : (
+            <TouchableOpacity onPress={() => { navigation.navigate('EntryDetail', { entryId: key }); }}>
+              <MetricCard metrics={metrics} date={formattedDate} />
+            </TouchableOpacity>
+          )
+        }
+      </View>
+    );
+  }
 
   renderEmptyDate = formattedDate => (
     <View style={styles.item}>
@@ -106,6 +110,7 @@ const styles = StyleSheet.create({
 
 History.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  navigation: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 const mapStateToProps = entries => ({
