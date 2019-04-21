@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation';
 
 import DateHeader from './DateHeader';
 import UdaciSlider from './UdaciSlider';
@@ -76,6 +77,7 @@ class DataEntry extends Component {
       [key]: entry,
     }));
     // navigate to home
+    this.toHome();
     // save to db
     submitEntry({ key, entry });
     // clear local notification
@@ -97,8 +99,14 @@ class DataEntry extends Component {
       [key]: getDailyReminderValue(),
     }));
     // route to home
+    this.toHome();
     // update db
     removeEntry(key);
+  }
+
+  toHome = () => {
+    const { navigation } = this.props;
+    navigation.dispatch(NavigationActions.back({ key: 'DataEntry' }));
   }
 
   render() {
@@ -211,6 +219,7 @@ DataEntry.defaultProps = {
 DataEntry.propTypes = {
   alreadyLogged: PropTypes.bool,
   dispatch: PropTypes.func.isRequired,
+  navigation: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 const mapStateToProps = (state) => {
