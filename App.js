@@ -7,9 +7,13 @@ import store from './store';
 import UdaciStatusBar from './components/UdaciStatusBar';
 import MainNavigator from './navigations/MainNavigator';
 import { purple } from './utils/colors';
+import { setLocalNotification } from './utils/helpers';
 
-// eslint-disable-next-line react/prefer-stateless-function
 export default class App extends Component {
+  componentDidMount() {
+    setLocalNotification();
+  }
+
   render() {
     return (
       <Provider store={store}>

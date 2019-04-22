@@ -19,6 +19,8 @@ import {
   timeToString,
   getDailyReminderValue,
   getPlatformOS,
+  clearLocalNotification,
+  setLocalNotification,
 } from '../utils/helpers';
 import { submitEntry, removeEntry } from '../utils/api';
 import { addEntry } from '../store/actions';
@@ -72,6 +74,14 @@ class DataEntry extends Component {
     const entry = this.state;
     const { dispatch } = this.props;
 
+    this.setState({
+      run: 0,
+      bike: 0,
+      swim: 0,
+      sleep: 0,
+      eat: 0,
+    });
+
     // update redux
     dispatch(addEntry({
       [key]: entry,
@@ -81,13 +91,8 @@ class DataEntry extends Component {
     // save to db
     submitEntry({ key, entry });
     // clear local notification
-    this.setState({
-      run: 0,
-      bike: 0,
-      swim: 0,
-      sleep: 0,
-      eat: 0,
-    });
+    clearLocalNotification()
+      .then(setLocalNotification);
   }
 
   reset = () => {
